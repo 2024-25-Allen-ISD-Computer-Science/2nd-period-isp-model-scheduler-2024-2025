@@ -1,5 +1,8 @@
 # Model Scheduler
 
+VERSION:
+0.0.3
+
 ## Developers
  - Hannah Seo (hannah-seo)
  - Issac Hooper (Fizzy78)

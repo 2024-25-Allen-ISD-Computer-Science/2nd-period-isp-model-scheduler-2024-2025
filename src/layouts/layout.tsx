@@ -1,5 +1,5 @@
 export default function Layout() {
     return <>
-        Hello World!
+        0.0.1
     </>
 }
