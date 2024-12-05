@@ -8,3 +8,9 @@ rm -rf ./node_modules
 print "Installing node packages"
 npm install 
 
+# CHANGE LATER TO DEPLOY THROUGH .github/workflows/deploy.yml
+git stash
+git add -f dist/
+git commit -m "VERSION #"
+git subtree push --prefix dist origin production
+git pop
