@@ -1,7 +1,11 @@
+import { Outlet } from "react-router-dom";
+
+// import Navbar from "../components/Navbar"
+
 export default function Layout() {
     return <>
-        <div className="w-screen h-screen bg-[#070707]">
-            
+        <div className="flex flex-col w-screen h-screen bg-neutral-900">
+            <Outlet />
         </div>
     </>
 }
