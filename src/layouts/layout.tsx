@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 
 export default function Layout() {
     return <>
-        <div className="flex flex-col w-screen h-screen bg-neutral-900">
+        <div className="flex flex-col w-[100vw] max-w-[100vw] h-[100vh] max-h-[100vh] bg-baseM-50 p-8 overflow-hidden">
             <Outlet />
         </div>
     </>

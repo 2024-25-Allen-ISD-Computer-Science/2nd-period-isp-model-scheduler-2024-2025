@@ -1,0 +1,50 @@
+export const data : {[name: string]: {
+    department: string,
+    periods: Array<number>,
+    term: Array<number>,
+    total_enrollment: number,
+    max_positions: number,
+}} = {
+    "AP Environmental Science": {
+        department: "STEAM",
+        periods: [1, 2, 3, 4],
+        term: [1],
+        total_enrollment: 30,
+        max_positions: 100,
+    },
+    "Class 2": {
+        department: "AHS",
+        periods: [1, 2, 3, 4, 5, 6, 7, 8],
+        term: [2],
+        total_enrollment: 70,
+        max_positions: 90,
+    },
+    "Class 3": {
+        department: "CTE",
+        periods: [5, 6, 7, 8],
+        term: [1, 2],
+        total_enrollment: 125,
+        max_positions: 300,
+    },
+    "AP Environmental Science1": {
+        department: "STEAM",
+        periods: [1, 2, 3, 4],
+        term: [1],
+        total_enrollment: 30,
+        max_positions: 100,
+    },
+    "Class 21": {
+        department: "AHS",
+        periods: [1, 2, 3, 4, 5, 6, 7, 8],
+        term: [2],
+        total_enrollment: 70,
+        max_positions: 90,
+    },
+    "Class 31": {
+        department: "CTE",
+        periods: [5, 6, 7, 8],
+        term: [1, 2],
+        total_enrollment: 125,
+        max_positions: 300,
+    },
+}
