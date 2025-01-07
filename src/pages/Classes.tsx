@@ -6,6 +6,7 @@ import { IoMdClose } from "react-icons/io";
 import { data } from "../assets/data";
 import ClassButton from "../components/ClassButton";
 import { CampusTag, TermTag } from "../components/Tags";
+import { MdArrowLeft, MdArrowRight } from "react-icons/md";
 
 export default function Classes() {
 
@@ -19,7 +20,8 @@ export default function Classes() {
         periods: [1, 2, 3, 4, 5, 6, 7, 8],
         term: [1, 2],
         campus: ["STEAM", "AHS", "CTE"],
-    })
+    });
+    const [selected, setSelected] = useState<{[side: string]: number}>({});
 
     function filterTerms(filterArray: Array<number>, classArray: Array<number>) {
         if (filterArray.length == 2) {
@@ -195,9 +197,9 @@ export default function Classes() {
             </div>
             {/* Middle */}
             <div className="w-1/4 h-full flex items-center justify-between mb-4 rounded-lg p-4 gap-3">
-                <div className="w-full h-[60%] bg-baseM-200 p-4 gap-3 rounded-lg flex flex-col">
+                <div className="w-full h-[60%] bg-baseM-200 p-4 gap-3 rounded-lg flex flex-col items-center justify-center">
                     {/* Search Bar and Filter */}
-                    <div className="w-full h-[10%] flex items-center justify-between gap-3">
+                    <div className="w-full  flex items-center justify-between gap-3">
                         <div className="flex-grow flex h-full items-between justify-between bg-baseM-100 rounded-lg px-3 py-2 border-none focus:outline outline-offset-2 outline-blue-100 transition-all">
                         <input
                             id="available_classes"
@@ -218,6 +220,21 @@ export default function Classes() {
                         </button>
                     </div>
                     {/* Transfer Buttons */}
+                    <div className="w-full flex flex-col flex-grow items-center justify-center p-4 gap-6">
+                        <button
+                            className={`w-1/2 p-3 flex items-center justify-evenly rounded-md border-2 border-green-100 text-green-100 transition-colors`}
+                            // border-green-100/60
+                        >
+                            <span className="text-lg">Add</span>
+                            <span className="text-2xl"><MdArrowRight /></span>
+                        </button>
+                        <button
+                            className={`w-1/2 p-3 flex items-center justify-evenly rounded-md border-2`}
+                        >
+                            <span className="text-2xl"><MdArrowLeft /></span>
+                            <span className="text-lg">Remove</span>
+                        </button>
+                    </div>
                 </div>
             </div>
             {/* Right Side */}
