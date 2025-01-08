@@ -3,6 +3,9 @@ import { CampusTag, TermTag } from "./Tags";
 export default function ClassButton({
     name,
     value,
+    selected,
+    clearSelected,
+    updateSelected,
 }: {
     name: string,
     value: {
@@ -11,7 +14,10 @@ export default function ClassButton({
         term: Array<number>,
         total_enrollment: number,
         max_positions: number,
-    }
+    },
+    selected: {left: number | null, right: number | null},
+    clearSelected: () => void,
+    updatedeSelected: (position: string, id: number) => void,
 }) {
     const fraction = parseFloat((5 - (value.total_enrollment / value.max_positions) * 5).toFixed(2));
     

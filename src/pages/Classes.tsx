@@ -3,10 +3,10 @@ import { CiFilter } from "react-icons/ci";
 import { AnimatePresence, motion } from "motion/react";
 import { IoMdClose } from "react-icons/io";
 
+
 import { data } from "../assets/data";
 import ClassButton from "../components/ClassButton";
 import { CampusTag, TermTag } from "../components/Tags";
-import { MdArrowLeft, MdArrowRight } from "react-icons/md";
 
 export default function Classes() {
 
@@ -21,7 +21,7 @@ export default function Classes() {
         term: [1, 2],
         campus: ["STEAM", "AHS", "CTE"],
     });
-    const [selected, setSelected] = useState<{[side: string]: number}>({});
+    const [selected, setSelected] = useState<{[side: string]: number | null}>({left: null, right: null});
 
     function filterTerms(filterArray: Array<number>, classArray: Array<number>) {
         if (filterArray.length == 2) {
@@ -29,7 +29,20 @@ export default function Classes() {
         } else if (JSON.stringify(filterArray) == JSON.stringify(classArray)) {
             return true;
         } else {
-            return false
+            return false;
+        }
+    }
+
+    function resetSelected() {
+        setSelected({left: null, right: null});
+    }
+
+    function updateSelected(position: string, id: number) {
+        if (position === "left" || position === "right") {
+            setSelected((prev) => ({
+                ...prev,
+                [position]: id,
+            }))
         }
     }
 
@@ -197,7 +210,7 @@ export default function Classes() {
             </div>
             {/* Middle */}
             <div className="w-1/4 h-full flex items-center justify-between mb-4 rounded-lg p-4 gap-3">
-                <div className="w-full h-[60%] bg-baseM-200 p-4 gap-3 rounded-lg flex flex-col items-center justify-center">
+                <div className="w-full h-[40%] bg-baseM-200 p-4 gap-3 rounded-lg flex flex-col items-center justify-center">
                     {/* Search Bar and Filter */}
                     <div className="w-full  flex items-center justify-between gap-3">
                         <div className="flex-grow flex h-full items-between justify-between bg-baseM-100 rounded-lg px-3 py-2 border-none focus:outline outline-offset-2 outline-blue-100 transition-all">
@@ -222,17 +235,19 @@ export default function Classes() {
                     {/* Transfer Buttons */}
                     <div className="w-full flex flex-col flex-grow items-center justify-center p-4 gap-6">
                         <button
-                            className={`w-1/2 p-3 flex items-center justify-evenly rounded-md border-2 border-green-100 text-green-100 transition-colors`}
-                            // border-green-100/60
+                            className={`w-1/3 px-3 py-2 flex items-center justify-center gap-1 rounded-md border-2 ${selected.left == null ? "border-emerald-900 text-emerald-900" : "border-emerald-600 text-emerald-600 hover:border-emerald-700 hover:text-emerald-700"} transition-colors`}
                         >
                             <span className="text-lg">Add</span>
-                            <span className="text-2xl"><MdArrowRight /></span>
                         </button>
                         <button
-                            className={`w-1/2 p-3 flex items-center justify-evenly rounded-md border-2`}
+                            className={`w-1/3 px-3 py-2 flex items-center justify-center gap-1 rounded-md border-2 border-rose-600 text-rose-600 hover:border-rose-700 hover:text-rose-700 transition-colors`}
                         >
-                            <span className="text-2xl"><MdArrowLeft /></span>
                             <span className="text-lg">Remove</span>
+                        </button>
+                        <button
+                            className={`w-1/3 px-3 py-2 flex items-center justify-center gap-1 rounded-md border-2 border-rose-600 text-rose-600 hover:border-rose-700 hover:text-rose-700 transition-colors`}
+                        >
+                            <span className="text-lg">Clear</span>
                         </button>
                     </div>
                 </div>
@@ -264,7 +279,6 @@ export default function Classes() {
                     </div>
                 </div>
             </div>
-
         </div>
         </>
     )
