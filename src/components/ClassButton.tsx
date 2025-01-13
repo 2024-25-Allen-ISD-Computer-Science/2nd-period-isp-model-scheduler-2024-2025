@@ -1,38 +1,31 @@
 import { CampusTag, TermTag } from "./Tags";
 
 export default function ClassButton({
-    name,
     value,
-    selected,
-    clearSelected,
-    updateSelected,
 }: {
-    name: string,
     value: {
+        name: string,
         department: string,
         periods: Array<number>,
         term: Array<number>,
         total_enrollment: number,
         max_positions: number,
     },
-    selected: {left: number | null, right: number | null},
-    clearSelected: () => void,
-    updatedeSelected: (position: string, id: number) => void,
 }) {
     const fraction = parseFloat((5 - (value.total_enrollment / value.max_positions) * 5).toFixed(2));
     
-    return <div className="w-full h-full flex gap-1 justify-between bg-baseM-100 rounded-lg my-3 mx-2 p-4">
-        <div className="w-grow flex flex-col gap-1 justify-between">
+    return <div className="w-full h-full flex gap-1 justify-between items-center bg-baseM-100 rounded-lg my-2 p-4">
+        <div className="w-[70%] flex flex-col gap-1 justify-between text-start">
             {/* Class Name */}
-            <div className="text-xl font-bold tracking-wider">
-                {name}
+            <div className="md:text-lg text-xl font-bold tracking-wider">
+                {value.name}
             </div>
 
             {/* Availabe Periods */}
             <div className="w-full h-8 flex items-center justify-start gap-2">
                 <div>Periods:</div>
                 {[1, 2, 3, 4, 5, 6, 7, 8].map((period) => {
-                    return <div key={period} className={`w-6 h-6 bg-[#222222] flex items-center justify-center rounded-lg bg-baseM-100 ${value.periods.includes(period) ? "text-text-white" : "text-text-sub"}`}>
+                    return <div key={period} className={`w-6 h-6 bg-[#222222] flex items-center justify-center rounded-lg bg-baseM-100 ${value.periods.includes(period) ? "text-white" : "text-zinc-500"}`}>
                         {period}
                     </div>
                 })}
@@ -66,7 +59,8 @@ export default function ClassButton({
                 }
             </div>
         </div>
-        <div className="w-24 h-full flex flex-col justify-evenly">
+        {/* Tags */}
+        <div className="w-[20%] min-w-24 h-full flex flex-col justify-evenly gap-2">
             <div className="w-full h-10">
                 <CampusTag campus={value.department} />
             </div>

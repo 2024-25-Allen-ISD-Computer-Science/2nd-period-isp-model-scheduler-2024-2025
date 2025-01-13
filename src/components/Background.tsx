@@ -3,7 +3,7 @@ import Particles, {initParticlesEngine} from '@tsparticles/react';
 import { type Container, type ISourceOptions, MoveDirection, OutMode } from '@tsparticles/engine';
 import { loadSlim } from '@tsparticles/slim';
 
-export function LinesBackground() {
+export function LinesBackground({ className }: { className?: string }) {
     const [init, setInit] = useState(false);
 
     useEffect(() => {
@@ -22,7 +22,7 @@ export function LinesBackground() {
         () => ({
         background: {
             color: {
-            value: "#0d47a1",
+            value: "#0d0d0d",
             },
         },
         fpsLimit: 120,
@@ -65,14 +65,14 @@ export function LinesBackground() {
                 default: OutMode.out,
             },
             random: false,
-            speed: 6,
+            speed: 1,
             straight: false,
             },
             number: {
             density: {
-                enable: true,
+                enable: false,
             },
-            value: 80,
+            value: 150,
             },
             opacity: {
             value: 0.5,
@@ -95,6 +95,7 @@ export function LinesBackground() {
                 id="links"
                 particlesLoaded={particlesLoaded}
                 options={options}
+                className={className}
             />
         )
     }

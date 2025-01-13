@@ -12,7 +12,7 @@ export default {
       transparent: "transparent",
       "baseM-50": "#0d0d0d",
       "baseM-100": "#161616",
-      "baseM-200": "#1e1e1e",
+      "baseM-200": "#1a1a1c",
       "baseM-300": "#202020",
       "baseM-400": "#262626",
       "textM-main": "#dcdcdc",

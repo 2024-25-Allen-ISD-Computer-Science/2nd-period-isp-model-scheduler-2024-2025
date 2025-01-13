@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 
-// Stores values into local storage
 export default function useLocalStorage<T>(key: string, initValue: T): [T, (value: T) => void] {
 
     // Fetch data from local storage
