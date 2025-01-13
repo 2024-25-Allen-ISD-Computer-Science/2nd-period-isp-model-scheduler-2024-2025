@@ -129,8 +129,21 @@ export default function Schedule() {
                                 Object.entries(availableClasses).map((value, i) => {
                                     return <button
                                                 key={i}
-                                                className={`w-full my-1`}
-                                                onClick={() => {}}
+                                                className={`w-full my-1 rounded-lg transition-all border-2 hover:border-yellow-600 ${focus.middle == value[1] ? "border-yellow-500" : "border-transparent"}`}
+                                                onClick={() => {
+                                                    console.log(value[1])
+                                                    if (focus.middle == value[1]) {
+                                                        setFocus((prev) => ({
+                                                            ...prev,
+                                                            middle: null
+                                                        }))
+                                                    } else {
+                                                        setFocus((prev) => ({
+                                                            ...prev,
+                                                            middle: value[1]
+                                                        }))
+                                                    }
+                                                }}
                                             >
                                         <ClassButton value={data[value[1]]} />
                                     </button>
