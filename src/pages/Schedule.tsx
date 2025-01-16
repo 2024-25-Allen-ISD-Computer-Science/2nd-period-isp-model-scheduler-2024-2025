@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { data } from "../assets/data";
 import useLocalStorage from "../util/useLocalStorage";
@@ -9,9 +9,10 @@ import ClassButton from "../components/ClassButton";
 export default function Schedule() {
 
     const [classes] = useLocalStorage<Array<number>>("selected_classes", []);
-    const [schedule, setSchedule] = useLocalStorage<{a: {1: number | null, 2: number | null, 3: number | null, 4: number | null, 5: number | null, 6: number | null, 7: number | null, 8: number | null}, b: {1: number | null, 2: number | null, 3: number | null, 4: number | null, 5: number | null, 6: number | null, 7: number | null, 8: number | null}}>("scheduled_classes", {a: {1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null, 8: null}, b: {1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null, 8: null}})
+    const [schedule, setSchedule] = useLocalStorage<{fall: {1: number | null, 2: number | null, 3: number | null, 4: number | null, 5: number | null, 6: number | null, 7: number | null, 8: number | null}, spring: {1: number | null, 2: number | null, 3: number | null, 4: number | null, 5: number | null, 6: number | null, 7: number | null, 8: number | null}}>("scheduled_classes", {fall: {1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null, 8: null}, spring: {1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null, 8: null}})
     const [availableClasses, setAvailableClasses] = useState<Array<number>>(classes);
-    const [focus, setFocus] = useState<{left: null | number, middle: null | number, right: null | number}>({left: null, middle: null, right: null})
+    const [focus, setFocus] = useState<null | number>(null);
+    const [availableTimes, setAvailableTimes] = useState<{fall: Array<number>, spring: Array<number>}>({fall: [], spring: []});
     const times = {
         1: {
             AHS: ["8:45", "9:37"],
@@ -46,11 +47,33 @@ export default function Schedule() {
         }
     }
 
+    // update the availableTimes based on periods and campus travel times
+    useEffect(() => {
+        if (focus != null) {
+            console.log("hi")
+        }
+    }, [focus])
+    
+    // Set the availableClasses array to only include classes selected and not scheduled
+    useEffect(() => {
+        setAvailableClasses([]);
+        const scheduledClasses : Array<number> = [];
+        Object.entries(schedule.fall).map((value) => {
+            if (value[1] != null && !scheduledClasses.includes(parseInt(value[0]))) scheduledClasses.push(parseInt(value[0]));
+        })
+        Object.entries(schedule.spring).map((value) => {
+            if (value[1] != null && !scheduledClasses.includes(parseInt(value[0]))) scheduledClasses.push(parseInt(value[0]));
+        })
+        for (const item in classes) {
+            if (!scheduledClasses.includes(classes[parseInt(item)])) setAvailableClasses(prev => [...prev, classes[parseInt(item)]]);
+        }
+    }, [schedule, classes])
+
     return (
         <>
         <div className="w-full h-full flex flex-grow justify-evenly gap-3">
             {/* Fall Semester */}
-            <div className="w-[35%] h-full flex flex-col items-center justify-start px-4 py-8 rounded-lg gap-3 bg-baseM-200">
+            <div className="w-[35%] h-full flex flex-col items-center justify-start px-4 py-8 rounded-lg gap-3">
                 <div className="w-full h-[8%] flex items-center justify-center font-semibold tracking-wider text-lg rounded-lg border border-zinc-700 bg-zinc-900 mb-1">
                     Fall Semester
                 </div>
@@ -114,7 +137,12 @@ export default function Schedule() {
                 </div>
             </div>
             {/* Available Classes */}
-            <div className={`w-[30%] h-full flex flex-col items-center ${availableClasses.length == 0 ? "justify-center" : "justify-start"} bg-baseM-200 p-4 rounded-lg overflow-y-auto`}>
+            <div
+                className={`w-[30%] h-full flex flex-col items-center ${availableClasses.length == 0 ? "justify-center" : "justify-start"} bg-baseM-200 py-4 rounded-lg overflow-y-auto`}
+                style={{
+                    scrollbarWidth: "thin",
+                }}
+            >
                 {
                     availableClasses.length == 0 ? <>
                         <div className="flex flex-col justify-center items-center">
@@ -124,24 +152,22 @@ export default function Schedule() {
                             }}>here</Link></span>
                         </div>
                     </> : <>
-                        <div className="w-full h-full overflow-x-hidden">
+                        <div
+                            className="w-full h-full overflow-x-hidden px-4"
+                            style={{
+                                scrollbarWidth: "thin",
+                            }}
+                            >
                             {
                                 Object.entries(availableClasses).map((value, i) => {
                                     return <button
                                                 key={i}
-                                                className={`w-full my-1 rounded-lg transition-all border-2 hover:border-yellow-600 ${focus.middle == value[1] ? "border-yellow-500" : "border-transparent"}`}
+                                                className={`w-full flex items-center border-2 border-outline border-transparent my-4 ${focus == value[1] ? "border-yellow-500" : "hover:border-yellow-600"} rounded-lg transition-all`}
                                                 onClick={() => {
-                                                    console.log(value[1])
-                                                    if (focus.middle == value[1]) {
-                                                        setFocus((prev) => ({
-                                                            ...prev,
-                                                            middle: null
-                                                        }))
+                                                    if (focus == value[1]) {
+                                                        setFocus(null);
                                                     } else {
-                                                        setFocus((prev) => ({
-                                                            ...prev,
-                                                            middle: value[1]
-                                                        }))
+                                                        setFocus(value[1]);
                                                     }
                                                 }}
                                             >
@@ -153,8 +179,8 @@ export default function Schedule() {
                     </>
                 }
             </div>
-            {/* Fall Semester */}
-            <div className="w-[35%] h-full flex flex-col items-center justify-start px-4 py-8 rounded-lg gap-3 bg-baseM-200">
+            {/* Spring Semester */}
+            <div className="w-[35%] h-full flex flex-col items-center justify-start px-4 py-8 rounded-lg gap-3">
                 <div className="w-full h-[8%] flex items-center justify-center font-semibold tracking-wider text-lg rounded-lg border border-zinc-700 bg-zinc-900 mb-1">
                     Spring Semester
                 </div>
