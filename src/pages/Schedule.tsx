@@ -4,12 +4,32 @@ import { data } from "../assets/data";
 import useLocalStorage from "../util/useLocalStorage";
 import ClassButton from "../components/ClassButton";
 
-
+interface Schedule {
+    fall: {
+        1: number | null,
+        2: number | null,
+        3: number | null,
+        4: number | null,
+        5: number | null,
+        6: number | null,
+        7: number | null,
+        8: number | null},
+    spring: {
+        1: number | null,
+        2: number | null,
+        3: number | null,
+        4: number | null,
+        5: number | null,
+        6: number | null,
+        7: number | null,
+        8: number | null
+    }
+}
 
 export default function Schedule() {
 
     const [classes] = useLocalStorage<Array<number>>("selected_classes", []);
-    const [schedule, setSchedule] = useLocalStorage<{fall: {1: number | null, 2: number | null, 3: number | null, 4: number | null, 5: number | null, 6: number | null, 7: number | null, 8: number | null}, spring: {1: number | null, 2: number | null, 3: number | null, 4: number | null, 5: number | null, 6: number | null, 7: number | null, 8: number | null}}>("scheduled_classes", {fall: {1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null, 8: null}, spring: {1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null, 8: null}})
+    const [schedule, setSchedule] = useLocalStorage<Schedule>("scheduled_classes", {fall: {1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null, 8: null}, spring: {1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null, 8: null}})
     const [availableClasses, setAvailableClasses] = useState<Array<number>>(classes);
     const [focus, setFocus] = useState<null | number>(null);
     const [availableTimes, setAvailableTimes] = useState<{fall: Array<number>, spring: Array<number>}>({fall: [], spring: []});
@@ -53,6 +73,26 @@ export default function Schedule() {
             console.log("hi")
         }
     }, [focus])
+
+    function isAvailable(id: number, period: number) {
+        return data[id].periods.includes(period);
+    }
+
+    function addToSchedule(id: number, period: number, section?: "fall" | "spring", ) {
+        if (section == undefined || data[id].term.length == 2) {
+            setSchedule((prev: Schedule) => {
+                const newSchedule: Schedule = { ...prev };
+
+                // COMPLETE ALL OTHER TEST CASES
+                if (data[id].term.length == 2) {
+                    newSchedule.fall[period] = id;
+                    newSchedule["spring"][period] = id;
+                }
+                
+                return newSchedule;
+            });
+        }
+    }
     
     // Set the availableClasses array to only include classes selected and not scheduled
     useEffect(() => {
@@ -88,7 +128,11 @@ export default function Schedule() {
                     </div>
                     <div className="w-full flex flex-col flex-grow gap-3">
                         <button
-                            className={`w-full h-[18%] bg-zinc-800 rounded-lg`}
+                            className={`w-full h-[18%] border-2 border-transparent ${focus != null ? isAvailable(focus, 1) ? "bg-zinc-800 border-zinc-600" : "bg-zinc-900" : "bg-zinc-800"} rounded-lg transition-all`}
+                            disabled={focus == null || !isAvailable(focus, 1)}
+                            onClick={() => {
+
+                            }}
                         >
                             <span>1<sup>st</sup> Period</span>
                         </button>
