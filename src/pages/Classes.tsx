@@ -10,8 +10,6 @@ import { CampusTag, TermTag } from "../components/Tags";
 import useLocalStorage from "../util/useLocalStorage";
 import { Link } from "react-router-dom";
 
-// https://blog.logrocket.com/virtual-scrolling-core-principles-and-basic-implementation-in-react/
-
 export default function Classes() {
 
     const [leftSearch, setLeftSearch] = useState<string>("");
