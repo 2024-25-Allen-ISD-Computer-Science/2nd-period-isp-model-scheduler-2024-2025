@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { data } from "../assets/data";
 import useLocalStorage from "../util/useLocalStorage";
 import ClassButton from "../components/ClassButton";
+import { GiConsoleController } from "react-icons/gi";
 
 interface Schedule {
     fall: {
@@ -33,41 +34,43 @@ export default function Schedule() {
     const [availableClasses, setAvailableClasses] = useState<Array<number>>(classes);
     const [focus, setFocus] = useState<null | number>(null);
     const [availableTimes, setAvailableTimes] = useState<{fall: Array<number>, spring: Array<number>}>({fall: [], spring: []});
-    const times = {
-        1: {
-            AHS: ["8:45", "9:37"],
-            STEAM: ["8:14", "9:08"],
-        },
-        2: {
-            AHS: ["9:43", "11:16"],
-            STEAM: ["9:25", "10:58"],
-        },
-        3: {
-            AHS: ["11:22", "1:28"],
-            STEAM: ["11:39", "1:12"],
-        },
-        4: {
-            AHS: ["1:35", "3:08"],
-            STEAM: ["2:00", "3:33"],
-        },
-        5: {
-            AHS: ["9:43", "11:16"],
-            STEAM: ["9:25", "10:58"],
-        },
-        6: {
-            AHS: ["11:22", "1:28"],
-            STEAM: ["11:39", "1:12"],
-        },
-        7: {
-            AHS: ["1:35", "3:08"],
-            STEAM: ["2:00", "3:33"],
-        },
-        8: {
-            AHS: ["3:14", "4:05"],
-        }
-    }
+    const periods = ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th"]
+    // const times = {
+    //     1: {
+    //         AHS: ["8:45", "9:37"],
+    //         STEAM: ["8:14", "9:08"],
+    //     },
+    //     2: {
+    //         AHS: ["9:43", "11:16"],
+    //         STEAM: ["9:25", "10:58"],
+    //     },
+    //     3: {
+    //         AHS: ["11:22", "1:28"],
+    //         STEAM: ["11:39", "1:12"],
+    //     },
+    //     4: {
+    //         AHS: ["1:35", "3:08"],
+    //         STEAM: ["2:00", "3:33"],
+    //     },
+    //     5: {
+    //         AHS: ["9:43", "11:16"],
+    //         STEAM: ["9:25", "10:58"],
+    //     },
+    //     6: {
+    //         AHS: ["11:22", "1:28"],
+    //         STEAM: ["11:39", "1:12"],
+    //     },
+    //     7: {
+    //         AHS: ["1:35", "3:08"],
+    //         STEAM: ["2:00", "3:33"],
+    //     },
+    //     8: {
+    //         AHS: ["3:14", "4:05"],
+    //     }
+    // }
 
     // update the availableTimes based on periods and campus travel times
+    
     useEffect(() => {
         if (focus != null) {
             console.log("hi")
@@ -79,19 +82,17 @@ export default function Schedule() {
     }
 
     function addToSchedule(id: number, period: number, section?: "fall" | "spring", ) {
-        if (section == undefined || data[id].term.length == 2) {
-            setSchedule((prev: Schedule) => {
-                const newSchedule: Schedule = { ...prev };
-
-                // COMPLETE ALL OTHER TEST CASES
-                if (data[id].term.length == 2) {
-                    newSchedule.fall[period] = id;
-                    newSchedule["spring"][period] = id;
-                }
-                
-                return newSchedule;
-            });
+        const newSchedule: Schedule = { ...schedule };
+        
+        if (data[id].term.length == 2) {
+            newSchedule.fall[period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] = id;
+            newSchedule.spring[period  as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] = id;
+        } else if (section == "fall") {
+            newSchedule.fall[period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] = id;
+        } else if (section == "spring") {
+            newSchedule.spring[period  as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] = id;
         }
+        setSchedule(newSchedule);
     }
     
     // Set the availableClasses array to only include classes selected and not scheduled
@@ -99,10 +100,10 @@ export default function Schedule() {
         setAvailableClasses([]);
         const scheduledClasses : Array<number> = [];
         Object.entries(schedule.fall).map((value) => {
-            if (value[1] != null && !scheduledClasses.includes(parseInt(value[0]))) scheduledClasses.push(parseInt(value[0]));
+            if (value[1] != null && !scheduledClasses.includes(value[1])) scheduledClasses.push(value[1]);
         })
         Object.entries(schedule.spring).map((value) => {
-            if (value[1] != null && !scheduledClasses.includes(parseInt(value[0]))) scheduledClasses.push(parseInt(value[0]));
+            if (value[1] != null && !scheduledClasses.includes(value[1])) scheduledClasses.push(value[1]);
         })
         for (const item in classes) {
             if (!scheduledClasses.includes(classes[parseInt(item)])) setAvailableClasses(prev => [...prev, classes[parseInt(item)]]);
@@ -131,7 +132,8 @@ export default function Schedule() {
                             className={`w-full h-[18%] border-2 border-transparent ${focus != null ? isAvailable(focus, 1) ? "bg-zinc-800 border-zinc-600" : "bg-zinc-900" : "bg-zinc-800"} rounded-lg transition-all`}
                             disabled={focus == null || !isAvailable(focus, 1)}
                             onClick={() => {
-
+                                if (focus != null) addToSchedule(focus as number, 1, data[focus].term[0] == 1 ? "fall" : "spring")
+                                console.log(schedule)
                             }}
                         >
                             <span>1<sup>st</sup> Period</span>
@@ -237,53 +239,29 @@ export default function Schedule() {
                             B-Day
                         </div>
                     </div>
-                    <div className="w-full flex flex-col flex-grow gap-3">
-                        <button
-                            className={`w-full h-[18%] bg-zinc-800 rounded-lg`}
-                        >
-                            <span>1<sup>st</sup> Period</span>
-                        </button>
-                        <div className={'w-full h-[18%] flex justify-between gap-3'}>
-                            <button
-                                className={`w-1/2 h-full bg-zinc-800 rounded-lg`}
-                            >
-                                <span>2<sup>nd</sup> Period</span>
-                            </button>
-                            <button
-                                className={`w-1/2 h-full bg-zinc-800 rounded-lg`}
-                            >
-                                <span>5<sup>th</sup> Period</span>
-                            </button>
-                        </div>
-                        <div className={'w-full h-[18%] flex justify-between gap-3'}>
-                            <button
-                                className={`w-1/2 h-full bg-zinc-800 rounded-lg`}
-                            >
-                                <span>3<sup>rd</sup> Period</span>
-                            </button>
-                            <button
-                                className={`w-1/2 h-full bg-zinc-800 rounded-lg`}
-                            >
-                                <span>6<sup>th</sup> Period</span>
-                            </button>
-                        </div>
-                        <div className={'w-full h-[18%] flex justify-between gap-3'}>
-                            <button
-                                className={`w-1/2 h-full bg-zinc-800 rounded-lg`}
-                            >
-                                <span>4<sup>th</sup> Period</span>
-                            </button>
-                            <button
-                                className={`w-1/2 h-full bg-zinc-800 rounded-lg`}
-                            >
-                                <span>7<sup>th</sup> Period</span>
-                            </button>
-                        </div>
-                        <button
-                            className={`w-full h-[18%] bg-zinc-800 rounded-lg`}
-                        >
-                            <span>8<sup>th</sup> Period</span>
-                        </button>
+                    <div className="w-full grid flex-grow grid-cols-2 gap-3">
+                        {
+                            Object.entries([1, 2, 3, 4, 5, 6, 7, 8]).map((value, i) => {
+                                return (
+                                    <button
+                                        key={i}
+                                        className={`${value[1] == 1 || value[1] == 8 ? "col-span-2" : ""} w-full h-full border-2 border-transparent ${focus != null ? isAvailable(focus, 1) ? "bg-zinc-800 border-zinc-600" : "bg-zinc-900" : "bg-zinc-800"} rounded-lg transition-all`}
+                                        disabled={focus == null || !isAvailable(focus, value[1])}
+                                        onClick={() => {
+                                            if (focus != null) addToSchedule(focus as number, 1, data[focus].term[0] == 1 ? "fall" : "spring")
+                                            console.log(schedule)
+                                        }}
+                                    >
+                                        { schedule.spring[value[1] as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] == null ?
+                                            value[1] == 2 ? <span>2<sup>nd</sup> Period</span> : value[1] == 3 ? <span>3<sup>rd</sup> Period</span> : <span>{value[1]}<sup>st</sup> Period</span> :
+                                            <div>
+                                                Balls
+                                            </div>
+                                        }
+                                    </button>
+                                )
+                            })
+                        }
                     </div>
                 </div>
             </div>
