@@ -41,7 +41,7 @@ export const data : {[id: number]: {
     4: {
         name: "Class 21",
         department: "AHS",
-        periods: [1, 2, 3, 4, 5, 6, 7, 8],
+        periods: [1, 2, 3, 4],
         term: [2],
         total_enrollment: 70,
         max_positions: 90,

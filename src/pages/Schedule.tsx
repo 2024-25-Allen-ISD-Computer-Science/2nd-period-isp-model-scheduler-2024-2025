@@ -77,8 +77,14 @@ export default function Schedule() {
         }
     }, [focus])
 
-    function isAvailable(id: number, period: number) {
-        return data[id].periods.includes(period);
+    function isAvailable(id: number, period: number, term: Array<number>) {
+        if (data[id].term.length == 2) {
+            return data[id].periods.includes(period);
+        } else if (term.toString() == data[id].term.toString()) {
+            return data[id].periods.includes(period);
+        } else {
+            return false;
+        }
     }
 
     function addToSchedule(id: number, period: number, section?: "fall" | "spring", ) {
@@ -93,6 +99,16 @@ export default function Schedule() {
             newSchedule.spring[period  as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] = id;
         }
         setSchedule(newSchedule);
+    }
+
+    function resetSchedule() {
+        Object.entries(schedule.fall).map((value) => {
+            if (value[1] != null && !availableClasses.includes(value[1])) setAvailableClasses([...availableClasses, value[1]]);
+        })
+        Object.entries(schedule.spring).map((value) => {
+            if (value[1] != null && !availableClasses.includes(value[1])) setAvailableClasses([...availableClasses, value[1]]);
+        })
+        setSchedule({fall: {1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null, 8: null}, spring: {1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null, 8: null}});
     }
     
     // Set the availableClasses array to only include classes selected and not scheduled
@@ -129,8 +145,8 @@ export default function Schedule() {
                     </div>
                     <div className="w-full flex flex-col flex-grow gap-3">
                         <button
-                            className={`w-full h-[18%] border-2 border-transparent ${focus != null ? isAvailable(focus, 1) ? "bg-zinc-800 border-zinc-600" : "bg-zinc-900" : "bg-zinc-800"} rounded-lg transition-all`}
-                            disabled={focus == null || !isAvailable(focus, 1)}
+                            className={`w-full h-[18%] border-2 border-transparent ${focus != null ? isAvailable(focus, 1, [1]) ? "bg-zinc-800 border-zinc-600" : "bg-zinc-900" : "bg-zinc-800"} rounded-lg transition-all`}
+                            disabled={focus == null || !isAvailable(focus, 1, [1])}
                             onClick={() => {
                                 if (focus != null) addToSchedule(focus as number, 1, data[focus].term[0] == 1 ? "fall" : "spring")
                                 console.log(schedule)
@@ -183,8 +199,9 @@ export default function Schedule() {
                 </div>
             </div>
             {/* Available Classes */}
+            <div className="w-[30%] h-full flex flex-col gap-2">
             <div
-                className={`w-[30%] h-full flex flex-col items-center ${availableClasses.length == 0 ? "justify-center" : "justify-start"} bg-baseM-200 py-4 rounded-lg overflow-y-auto`}
+                className={`w-full h-full flex flex-col flex-grow items-center ${availableClasses.length == 0 ? "justify-center" : "justify-start"} bg-baseM-200 py-4 rounded-lg overflow-y-auto`}
                 style={{
                     scrollbarWidth: "thin",
                 }}
@@ -199,7 +216,7 @@ export default function Schedule() {
                         </div>
                     </> : <>
                         <div
-                            className="w-full h-full overflow-x-hidden px-4"
+                            className="w-full h-full flex flex-col flex-grow overflow-x-hidden px-4"
                             style={{
                                 scrollbarWidth: "thin",
                             }}
@@ -225,6 +242,16 @@ export default function Schedule() {
                     </>
                 }
             </div>
+                <button
+                    className="w-full h-[7vh] bg-zinc-700 rounded-lg"
+                    onClick={() => {
+                        resetSchedule()
+                    }}
+                    >
+                    Debug
+                </button>
+                
+            </div>
             {/* Spring Semester */}
             <div className="w-[35%] h-full flex flex-col items-center justify-start px-4 py-8 rounded-lg gap-3">
                 <div className="w-full h-[8%] flex items-center justify-center font-semibold tracking-wider text-lg rounded-lg border border-zinc-700 bg-zinc-900 mb-1">
@@ -239,24 +266,30 @@ export default function Schedule() {
                             B-Day
                         </div>
                     </div>
-                    <div className="w-full grid flex-grow grid-cols-2 gap-3">
+                    <div className="w-full h-[7vh] grid flex-grow grid-cols-2 gap-3">
                         {
                             Object.entries([1, 2, 3, 4, 5, 6, 7, 8]).map((value, i) => {
                                 return (
                                     <button
                                         key={i}
-                                        className={`${value[1] == 1 || value[1] == 8 ? "col-span-2" : ""} w-full h-full border-2 border-transparent ${focus != null ? isAvailable(focus, 1) ? "bg-zinc-800 border-zinc-600" : "bg-zinc-900" : "bg-zinc-800"} rounded-lg transition-all`}
-                                        disabled={focus == null || !isAvailable(focus, value[1])}
+                                        className={`${value[1] == 1 || value[1] == 8 ? "col-span-2" : ""} w-full h-full border-2 border-transparent ${focus != null ? isAvailable(focus, value[1], [2]) ? "bg-zinc-800 border-zinc-600" : "bg-zinc-900" : "bg-zinc-800"} rounded-lg transition-all`}
+                                        disabled={focus == null || !isAvailable(focus, value[1], [2])}
                                         onClick={() => {
-                                            if (focus != null) addToSchedule(focus as number, 1, data[focus].term[0] == 1 ? "fall" : "spring")
-                                            console.log(schedule)
+                                            if (focus != null) addToSchedule(focus as number, value[1], data[focus].term[0] == 1 ? "fall" : "spring")
                                         }}
                                     >
-                                        { schedule.spring[value[1] as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] == null ?
-                                            value[1] == 2 ? <span>2<sup>nd</sup> Period</span> : value[1] == 3 ? <span>3<sup>rd</sup> Period</span> : <span>{value[1]}<sup>st</sup> Period</span> :
-                                            <div>
-                                                Balls
+                                        { schedule.spring[value[1] as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] == null ? (
+                                            value[1] == 2 ? <span>2<sup>nd</sup> Period</span> : value[1] == 3 ? <span>3<sup>rd</sup> Period</span> : <span>{value[1]}<sup>st</sup> Period</span>
+                                            ) : (
+                                            <div className={`w-full h-full rounded-lg flex flex-col justify-evenly`}>
+                                                <div>
+                                                    {value[1] != null && schedule.spring[value[1] as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] != null ? data[schedule.spring[value[1] as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] as number].name : null}
+                                                </div>
+                                                <div>
+                                                    TIME
+                                                </div>
                                             </div>
+                                            )
                                         }
                                     </button>
                                 )
