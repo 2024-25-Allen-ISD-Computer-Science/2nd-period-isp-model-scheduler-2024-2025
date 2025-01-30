@@ -10,8 +10,6 @@ import { CampusTag, TermTag } from "../components/Tags";
 import useLocalStorage from "../util/useLocalStorage";
 import { Link } from "react-router-dom";
 
-// https://blog.logrocket.com/virtual-scrolling-core-principles-and-basic-implementation-in-react/
-
 export default function Classes() {
 
     const [leftSearch, setLeftSearch] = useState<string>("");
@@ -26,8 +24,7 @@ export default function Classes() {
         campus: ["STEAM", "AHS", "CTE"],
     });
     const [selected, setSelected] = useState<{[side: string]: number | null}>({left: null, right: null});
-    // const [classes, setClasses] = useState<Array<number>>([]);
-    const [classes, setClasses] = useLocalStorage<Array<{[id: number]: boolean}>>("selected_classes", [])
+    const [classes, setClasses] = useLocalStorage<Array<number>>("selected_classes", []);
 
     function filterTerms(filterArray: Array<number>, classArray: Array<number>) {
         if (filterArray.length == 2) {
@@ -203,10 +200,10 @@ export default function Classes() {
                         >
                         {
                             Object.entries(data).map(([key, value], i) => {
-                                if ((leftSearch == "" || key.toLocaleLowerCase().includes(leftSearch.toLocaleLowerCase())) && filters.campus.includes(value.department) && filterPeriods(filters.periods, value.periods) && filterTerms(filters.term, value.term)) {
+                                if ((leftSearch == "" || value.name.toLocaleLowerCase().includes(leftSearch.toLocaleLowerCase())) && filters.campus.includes(value.department) && filterPeriods(filters.periods, value.periods) && filterTerms(filters.term, value.term)) {
                                     return <button
                                         key={i}
-                                        className={`${Object.keys(classes).includes(i.toString()) ? "hidden" : ""} w-full h-36 flex items-center my-2 border-2 border-outline border-transparent rounded-lg ${selected.left == i ? "border-yellow-500" : "hover:border-yellow-600"} transition-all`}
+                                        className={`${classes.includes(i) ? "hidden" : ""} w-full h-36 flex items-center my-2 border-2 border-outline border-transparent rounded-lg ${selected.left == i ? "border-yellow-500" : "hover:border-yellow-600"} transition-all`}
                                         onClick={() => {
                                             if (selected.left != i) {
                                                 updateSelected("left", i);
@@ -218,7 +215,7 @@ export default function Classes() {
                                         <ClassButton value={value} />
                                     </button>
                                 } else {
-                                    return <div key={key}></div>
+                                    return <div key={key}>{key}</div>
                                 }
                             })
                         }
@@ -255,9 +252,7 @@ export default function Classes() {
                             className={`w-3/4 px-3 py-2 flex items-center justify-center gap-1 rounded-md border-2 ${selected.left == null ? "border-emerald-900 text-emerald-900" : "border-emerald-600 text-emerald-600 hover:border-emerald-700 hover:text-emerald-700"} transition-colors`}
                             onClick={() => {
                                 // if (selected.left != null) setClasses(...classes, selected.left);
-                                if (selected.left != null) setClasses((prev) => {
-                                    
-                                });
+                                if (selected.left != null) setClasses([...classes, selected.left]);
                                 updateSelected("left", null)
                             }}
                             disabled={selected.left == null}

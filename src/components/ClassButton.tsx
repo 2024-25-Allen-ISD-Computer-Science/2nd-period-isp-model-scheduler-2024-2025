@@ -14,7 +14,7 @@ export default function ClassButton({
 }) {
     const fraction = parseFloat((5 - (value.total_enrollment / value.max_positions) * 5).toFixed(2));
     
-    return <div className="w-full h-full flex gap-1 justify-between items-center bg-baseM-100 rounded-lg my-2 p-4">
+    return <div className="w-full h-full flex gap-1 justify-between items-center bg-baseM-100 rounded-lg p-4">
         <div className="w-[70%] flex flex-col gap-1 justify-between text-start">
             {/* Class Name */}
             <div className="md:text-lg text-xl font-bold tracking-wider">
