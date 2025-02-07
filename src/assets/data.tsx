@@ -47,7 +47,7 @@ export const data : {[id: number]: {
         max_positions: 90,
     },
     5: {
-        name: "Class 31",
+        name: "AP Physics I",
         department: "CTE",
         periods: [5, 6, 7, 8],
         term: [1, 2],

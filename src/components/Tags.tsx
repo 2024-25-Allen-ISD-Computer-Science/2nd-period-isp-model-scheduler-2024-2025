@@ -6,7 +6,7 @@ export function CampusTag({ campus, disabled=false, className }: {campus: string
     if (campus == "STEAM") {
         return (
             <div
-                className={`${className} border-2 ${disabled ? "text-[#525252] border-[#525252]" : "text-blue-600 border-blue-600"} w-full h-full flex items-center justify-center rounded-lg bg-transparent gap-1 transition-all`}
+                className={`${className} border-2 ${disabled ? "text-[#525252] border-[#525252]" : "text-blue-600 border-blue-600"} w-full h-full flex items-center justify-center rounded-lg bg-transparent gap-1 transition-all px-2 py-1`}
             >
                 <GiMaterialsScience /> STEAM
             </div>
@@ -14,7 +14,7 @@ export function CampusTag({ campus, disabled=false, className }: {campus: string
     } else if (campus == "AHS") {
         return (
             <div
-                className={`${className} border-2 ${disabled ? "text-[#525252] border-[#525252]" : "text-red-600 border-red-600"} w-full h-full flex items-center justify-center rounded-lg bg-transparent gap-1 transition-all`}
+                className={`${className} border-2 ${disabled ? "text-[#525252] border-[#525252]" : "text-red-600 border-red-600"} w-full h-full flex items-center justify-center rounded-lg bg-transparent gap-1 transition-all px-2 py-1`}
             >
                 <GiEagleHead /> AHS
             </div>
@@ -22,7 +22,7 @@ export function CampusTag({ campus, disabled=false, className }: {campus: string
     } else if (campus == "CTE") {
         return (
             <div
-                className={`${className} border-2 ${disabled ? "text-[#525252] border-[#525252]" : "text-green-600 border-green-600"} w-full h-full flex items-center justify-center rounded-lg bg-transparent gap-1 transition-all`}
+                className={`${className} border-2 ${disabled ? "text-[#525252] border-[#525252]" : "text-green-600 border-green-600"} w-full h-full flex items-center justify-center rounded-lg bg-transparent gap-1 transition-all px-2 py-1`}
             >
                 <MdOutlineBiotech /> CTE
             </div>

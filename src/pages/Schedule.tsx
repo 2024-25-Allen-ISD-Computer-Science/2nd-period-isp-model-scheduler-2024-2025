@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { data } from "../assets/data";
 import useLocalStorage from "../util/useLocalStorage";
 import ClassButton from "../components/ClassButton";
-import { GiConsoleController } from "react-icons/gi";
+import { CampusTag } from "../components/Tags";
 
 interface Schedule {
     fall: {
@@ -33,41 +33,41 @@ export default function Schedule() {
     const [schedule, setSchedule] = useLocalStorage<Schedule>("scheduled_classes", {fall: {1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null, 8: null}, spring: {1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null, 8: null}})
     const [availableClasses, setAvailableClasses] = useState<Array<number>>(classes);
     const [focus, setFocus] = useState<null | number>(null);
-    const [availableTimes, setAvailableTimes] = useState<{fall: Array<number>, spring: Array<number>}>({fall: [], spring: []});
-    const periods = ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th"]
-    // const times = {
-    //     1: {
-    //         AHS: ["8:45", "9:37"],
-    //         STEAM: ["8:14", "9:08"],
-    //     },
-    //     2: {
-    //         AHS: ["9:43", "11:16"],
-    //         STEAM: ["9:25", "10:58"],
-    //     },
-    //     3: {
-    //         AHS: ["11:22", "1:28"],
-    //         STEAM: ["11:39", "1:12"],
-    //     },
-    //     4: {
-    //         AHS: ["1:35", "3:08"],
-    //         STEAM: ["2:00", "3:33"],
-    //     },
-    //     5: {
-    //         AHS: ["9:43", "11:16"],
-    //         STEAM: ["9:25", "10:58"],
-    //     },
-    //     6: {
-    //         AHS: ["11:22", "1:28"],
-    //         STEAM: ["11:39", "1:12"],
-    //     },
-    //     7: {
-    //         AHS: ["1:35", "3:08"],
-    //         STEAM: ["2:00", "3:33"],
-    //     },
-    //     8: {
-    //         AHS: ["3:14", "4:05"],
-    //     }
-    // }
+    // const [availableTimes, setAvailableTimes] = useState<{fall: Array<number>, spring: Array<number>}>({fall: [], spring: []});
+    const times = {
+        1: {
+            AHS: ["8:45am", "9:37am"],
+            STEAM: ["8:14am", "9:08am"],
+        },
+        2: {
+            AHS: ["9:43am", "11:16am"],
+            STEAM: ["9:25am", "10:58am"],
+        },
+        3: {
+            AHS: ["11:22am", "1:28pm"],
+            STEAM: ["11:39am", "1:12pm"],
+        },
+        4: {
+            AHS: ["1:35pm", "3:08pm"],
+            STEAM: ["2:00pm", "3:33pm"],
+        },
+        5: {
+            AHS: ["9:43am", "11:16am"],
+            STEAM: ["9:25am", "10:58am"],
+        },
+        6: {
+            AHS: ["11:22a,", "1:28pm"],
+            STEAM: ["11:39a,", "1:12pm"],
+        },
+        7: {
+            AHS: ["1:35pm", "3:08pm"],
+            STEAM: ["2:00pm", "3:33pm"],
+        },
+        8: {
+            AHS: ["3:14pm", "4:05pm"],
+            STEAM: ["3:14pm", "4:05pm"],
+        }
+    }
 
     // update the availableTimes based on periods and campus travel times
     
@@ -76,6 +76,10 @@ export default function Schedule() {
             console.log("hi")
         }
     }, [focus])
+
+    useEffect(() => {
+        setFocus(null);
+    }, [schedule])
 
     function isAvailable(id: number, period: number, term: Array<number>) {
         if (data[id].term.length == 2) {
@@ -248,12 +252,12 @@ export default function Schedule() {
                         resetSchedule()
                     }}
                     >
-                    Debug
+                    {schedule.spring[7] == null ? "true" : schedule.spring[7]}
                 </button>
                 
             </div>
             {/* Spring Semester */}
-            <div className="w-[35%] h-full flex flex-col items-center justify-start px-4 py-8 rounded-lg gap-3">
+            <div className="w-[35%] h-full flex flex-col items-center justify-start px-4 py-4 rounded-lg gap-3">
                 <div className="w-full h-[8%] flex items-center justify-center font-semibold tracking-wider text-lg rounded-lg border border-zinc-700 bg-zinc-900 mb-1">
                     Spring Semester
                 </div>
@@ -266,32 +270,61 @@ export default function Schedule() {
                             B-Day
                         </div>
                     </div>
-                    <div className="w-full h-[7vh] grid flex-grow grid-cols-2 gap-3">
+                    <div className="w-full flex flex-grow flex-col gap-3">
                         {
-                            Object.entries([1, 2, 3, 4, 5, 6, 7, 8]).map((value, i) => {
-                                return (
-                                    <button
-                                        key={i}
-                                        className={`${value[1] == 1 || value[1] == 8 ? "col-span-2" : ""} w-full h-full border-2 border-transparent ${focus != null ? isAvailable(focus, value[1], [2]) ? "bg-zinc-800 border-zinc-600" : "bg-zinc-900" : "bg-zinc-800"} rounded-lg transition-all`}
-                                        disabled={focus == null || !isAvailable(focus, value[1], [2])}
-                                        onClick={() => {
-                                            if (focus != null) addToSchedule(focus as number, value[1], data[focus].term[0] == 1 ? "fall" : "spring")
-                                        }}
-                                    >
-                                        { schedule.spring[value[1] as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] == null ? (
-                                            value[1] == 2 ? <span>2<sup>nd</sup> Period</span> : value[1] == 3 ? <span>3<sup>rd</sup> Period</span> : <span>{value[1]}<sup>st</sup> Period</span>
-                                            ) : (
-                                            <div className={`w-full h-full rounded-lg flex flex-col justify-evenly`}>
-                                                <div>
-                                                    {value[1] != null && schedule.spring[value[1] as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] != null ? data[schedule.spring[value[1] as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] as number].name : null}
+                            Object.entries([[1], [2, 5], [3, 6], [4, 7], [8]]).map((value, i) => {
+                                function returnTime(index: number) {
+                                    return times[value[1][index] as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8].AHS.concat(times[value[1][index] as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8].STEAM);
+                                }
+                                function returnButton(period: number, half: boolean=false) {
+                                    return (
+                                        <button
+                                            key={i}
+                                            className={`${half ? "w-1/2 max-w-1/2" : "w-full"} h-full border-2 border-transparent ${focus != null ? isAvailable(focus, period, [2]) ? "bg-zinc-800 border-zinc-600" : "bg-zinc-900" : "bg-zinc-800"} rounded-lg transition-all p-2`}
+                                            // disabled={schedule.spring[period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] == null && (focus == null || !isAvailable(focus, period, [2]))}
+                                            // disabled={schedule.spring[period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] == null ? false : focus == null || !isAvailable(focus, period, [2])}
+                                            disabled={focus == null ? schedule.spring[period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] == null ? true : false : isAvailable(focus, period, [2]) ? false : true}
+                                            onClick={() => {
+                                                if (focus != null) {
+                                                    //! FIX BEING ABLE TO DUPLICATE CLASSES
+                                                    // let prevPeriod : number = 0;
+                                                    // for (const period of [1, 2, 3, 4, 5, 6, 7, 8]) {
+
+                                                    // }
+                                                    addToSchedule(focus as number, period, data[focus].term[0] == 1 ? "fall" : "spring")
+                                                } else {
+                                                    setFocus(schedule.spring[period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8])
+                                                };
+                                            }}
+                                        >
+                                            { schedule.spring[period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] == null ? (
+                                                period == 1 ? <span>1<sup>st</sup> Period</span> : period == 2 ? <span>2<sup>nd</sup> Period</span> : period == 3 ? <span>3<sup>rd</sup> Period</span> : <span>{period}<sup>th</sup> Period</span>
+                                                ) : (
+                                                <div className={`w-full h-full rounded-lg flex flex-col justify-center p-2`}>
+                                                    <div>
+                                                        {period != null && schedule.spring[period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] != null ? data[schedule.spring[period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] as number].name : null}
+                                                    </div>
+                                                    <div className="w-full flex items-center justify-evenly">
+                                                        <div className="w-1/3 text-sm">
+                                                            <CampusTag campus={data[schedule.spring[period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] as number].department} />
+                                                        </div>
+                                                        <div className="w-2/3 text-sm">
+                                                            <span>{data[schedule.spring[period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] as number].department == "AHS" ? time[0] : time[2]}</span><span>-</span><span>{data[schedule.spring[period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] as number].department == "AHS" ? time[1] : time[3]}</span>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    TIME
-                                                </div>
-                                            </div>
-                                            )
-                                        }
-                                    </button>
+                                                )
+                                            }
+                                        </button>
+                                    )
+                                }
+                                const time = value[0].length == 1 ? returnTime(0) : returnTime(0).concat(returnTime(1));
+                                if (value[1].length == 1) return <div className="w-full h-full max-h-[20%]">{returnButton(value[1][0])}</div>;
+                                if (value[1].length == 2) return (
+                                    <div className="w-full h-full max-h-[20%] flex gap-3">
+                                        {returnButton(value[1][0], true)}
+                                        {returnButton(value[1][1], true)}
+                                    </div>
                                 )
                             })
                         }
