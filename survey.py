@@ -12,3 +12,16 @@ with open(json_filename, mode="w", encoding="utf-8") as json_file:
     json.dump(data, json_file, indent=4)
 
 print(json.dumps(data, indent=4))
+
+metadata = {
+    "total_responses": len(data),
+    "average_difficulty": calculate_average_difficulty(data)
+}
+
+output_data = {
+    "metadata": metadata,
+    "responses": data
+}
+
+with open(json_filename, mode="w", encoding="utf-8") as json_file:
+    json.dump(output_data, json_file, indent=4)
