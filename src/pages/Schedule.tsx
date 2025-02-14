@@ -33,6 +33,7 @@ export default function Schedule() {
     const [schedule, setSchedule] = useLocalStorage<Schedule>("scheduled_classes", {fall: {1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null, 8: null}, spring: {1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null, 8: null}})
     const [availableClasses, setAvailableClasses] = useState<Array<number>>(classes);
     const [focus, setFocus] = useState<null | number>(null);
+    const [allowClassReset, setAllowClassReset] = useState<boolean>(false);
     // const [availableTimes, setAvailableTimes] = useState<{fall: Array<number>, spring: Array<number>}>({fall: [], spring: []});
     const times = {
         1: {
@@ -118,11 +119,21 @@ export default function Schedule() {
     function returnTime(index: number, value: [string, number[]]) {
         return times[value[1][index] as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8].AHS.concat(times[value[1][index] as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8].STEAM);
     }
-    function searchForID(id: number): number {
-        Object.entries(schedule.spring).map((value) => {
-            console.log(value)
+    function searchForID(id: number): {section: "year" | "fall" | "spring" | null, period: number} {
+        let period = 0;
+        Object.entries(schedule.fall).map((value) => {
+            if (value[1] == id) {
+                period = value[1];
+            }
         })
-        return 0
+        Object.entries(schedule.spring).map((value) => {
+            if (value[1] == id) {
+                if (period != 0) return {section: "year", period: value[1]}
+                if (period == 0) return {section: "spring", period: value[1]}
+            }
+        })
+        if (period != 0) return {section: "fall", period: period}
+        return {section: null, period: 0}
     }
     function returnButton(period: number, time: Array<string>, half: boolean=false) {
         return (
@@ -133,12 +144,12 @@ export default function Schedule() {
                 onClick={() => {
                     if (focus != null) {
                         //! FIX BEING ABLE TO DUPLICATE CLASSES
-                        // let prevPeriod : number = 0;
-                        // for (const period of [1, 2, 3, 4, 5, 6, 7, 8]) {
-
-                        // }
-                        searchForID(focus)
-                        addToSchedule(focus as number, period, data[focus].term[0] == 1 ? "fall" : "spring")
+                        const originalPos = searchForID(focus);
+                        if (originalPos.section == null) {
+                            addToSchedule(focus as number, period, data[focus].term[0] == 1 ? "fall" : "spring")
+                        } else if (originalPos.section == "spring" || originalPos.section == "year") {
+                            setAllowClassReset(true);
+                        }
                     } else {
                         setFocus(schedule.spring[period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8])
                     };
@@ -327,9 +338,9 @@ export default function Schedule() {
                         {
                             Object.entries([[1], [2, 5], [3, 6], [4, 7], [8]]).map((value, i) => {
                                 const time = value[0].length == 1 ? returnTime(0, value) : returnTime(0, value).concat(returnTime(1, value));
-                                if (value[1].length == 1) return <div className="w-full h-full max-h-[20%]">{returnButton(value[1][0], time)}</div>;
+                                if (value[1].length == 1) return <div className="w-full h-full max-h-[20%]" key={i}>{returnButton(value[1][0], time)}</div>;
                                 if (value[1].length == 2) return (
-                                    <div className="w-full h-full max-h-[20%] flex gap-3">
+                                    <div className="w-full h-full max-h-[20%] flex gap-3" key={i}>
                                         {returnButton(value[1][0], time, true)}
                                         {returnButton(value[1][1], time, true)}
                                     </div>
