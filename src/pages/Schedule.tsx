@@ -32,7 +32,8 @@ export default function Schedule() {
     const [classes] = useLocalStorage<Array<number>>("selected_classes", []);
     const [schedule, setSchedule] = useLocalStorage<Schedule>("scheduled_classes", {fall: {1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null, 8: null}, spring: {1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null, 8: null}})
     const [availableClasses, setAvailableClasses] = useState<Array<number>>(classes);
-    const [focus, setFocus] = useState<null | number>(null);
+    // Class ID
+    const [focus, setFocus] = useState<{classID: number | null, period: number | null, semester: "fall" | "spring" | "year" | null}>({classID: null, period: null, semester: null});
     const [allowClassReset, setAllowClassReset] = useState<boolean>(false);
     // const [availableTimes, setAvailableTimes] = useState<{fall: Array<number>, spring: Array<number>}>({fall: [], spring: []});
     const times = {
@@ -73,13 +74,13 @@ export default function Schedule() {
     // update the availableTimes based on periods and campus travel times
     
     useEffect(() => {
-        if (focus != null) {
-            console.log("hi")
+        if (focus.period != null) {
+            console.log("hi");
         }
     }, [focus])
 
     useEffect(() => {
-        setFocus(null);
+        resetFocus();
     }, [schedule])
 
     function isAvailable(id: number, period: number, term: Array<number>) {
@@ -106,6 +107,10 @@ export default function Schedule() {
         setSchedule(newSchedule);
     }
 
+    function resetFocus() {
+        setFocus({classID: null, period: null, semester: null});
+    }
+
     function resetSchedule() {
         Object.entries(schedule.fall).map((value) => {
             if (value[1] != null && !availableClasses.includes(value[1])) setAvailableClasses([...availableClasses, value[1]]);
@@ -119,40 +124,52 @@ export default function Schedule() {
     function returnTime(index: number, value: [string, number[]]) {
         return times[value[1][index] as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8].AHS.concat(times[value[1][index] as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8].STEAM);
     }
+
     function searchForID(id: number): {section: "year" | "fall" | "spring" | null, period: number} {
-        let period = 0;
+        let fallPeriod = 0;
+        let springPeriod = 0;
         Object.entries(schedule.fall).map((value) => {
             if (value[1] == id) {
-                period = value[1];
+                fallPeriod = value[1];
             }
         })
         Object.entries(schedule.spring).map((value) => {
             if (value[1] == id) {
-                if (period != 0) return {section: "year", period: value[1]}
-                if (period == 0) return {section: "spring", period: value[1]}
+                springPeriod = value[1]
             }
         })
-        if (period != 0) return {section: "fall", period: period}
-        return {section: null, period: 0}
+        if (fallPeriod == 0 && springPeriod != 0) {
+            return {section: "spring", period: springPeriod}
+        } else if (fallPeriod != 0 && springPeriod == 0) {
+            return {section: "fall", period: fallPeriod}
+        } else if (fallPeriod != 0 && springPeriod != 0 && fallPeriod == springPeriod) {
+            return {section: "year", period: fallPeriod}
+        } else {
+            return {section: null, period: 0}
+        }
     }
+
     function returnButton(period: number, time: Array<string>, half: boolean=false) {
         return (
             <button
                 key={period + 100}
-                className={`${half ? "w-1/2 max-w-1/2" : "w-full"} h-full border-2 border-transparent ${focus != null ? isAvailable(focus, period, [2]) ? "bg-zinc-800 border-zinc-600" : "bg-zinc-900" : "bg-zinc-800"} rounded-lg transition-all p-2`}
-                disabled={focus == null ? schedule.spring[period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] == null ? true : false : isAvailable(focus, period, [2]) ? false : true}
+                className={`${half ? "w-1/2 max-w-1/2" : "w-full"} h-full border-2 border-transparent ${focus.classID != null ? isAvailable(focus.classID, period, [2]) ? "bg-zinc-800 border-zinc-600" : "bg-zinc-900" : "bg-zinc-800"} rounded-lg transition-all p-2`}
+                disabled={focus.classID == null ? schedule.spring[period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] == null ? true : false : isAvailable(focus.classID, period, [2]) ? false : true}
                 onClick={() => {
-                    if (focus != null) {
+                    if (focus.classID != null) {
                         //! FIX BEING ABLE TO DUPLICATE CLASSES
-                        const originalPos = searchForID(focus);
-                        if (originalPos.section == null) {
-                            addToSchedule(focus as number, period, data[focus].term[0] == 1 ? "fall" : "spring")
+                        const originalPos = searchForID(focus.classID);
+                        if (focus.period == period) {
+                            resetFocus();
+                        } else if (originalPos.section == null) {
+                            addToSchedule(focus.classID as number, period, data[focus.classID].term[0] == 1 ? "fall" : "spring")
                         } else if (originalPos.section == "spring" || originalPos.section == "year") {
                             setAllowClassReset(true);
                         }
                     } else {
-                        setFocus(schedule.spring[period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8])
+                        setFocus({classID: schedule.spring[period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8], period: period, semester: focus.classID == null ? null : data[focus.classID as number].term.length == 2 ? "year" : data[focus.classID as number].term.length == 1 && data[focus.classID as number].term[0] == 1 ? "fall" : "spring"})
                     };
+                    console.log(focus.period, schedule)
                 }}
             >
                 { schedule.spring[period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] == null ? (
@@ -212,12 +229,7 @@ export default function Schedule() {
                     </div>
                     <div className="w-full flex flex-col flex-grow gap-3">
                         <button
-                            className={`w-full h-[18%] border-2 border-transparent ${focus != null ? isAvailable(focus, 1, [1]) ? "bg-zinc-800 border-zinc-600" : "bg-zinc-900" : "bg-zinc-800"} rounded-lg transition-all`}
-                            disabled={focus == null || !isAvailable(focus, 1, [1])}
-                            onClick={() => {
-                                if (focus != null) addToSchedule(focus as number, 1, data[focus].term[0] == 1 ? "fall" : "spring")
-                                console.log(schedule)
-                            }}
+                            className={`w-full h-[18%] border-2 border-transparent rounded-lg transition-all`}
                         >
                             <span>1<sup>st</sup> Period</span>
                         </button>
@@ -292,12 +304,12 @@ export default function Schedule() {
                                 Object.entries(availableClasses).map((value, i) => {
                                     return <button
                                                 key={value[i]}
-                                                className={`w-full flex items-center border-2 border-outline border-transparent my-4 ${focus == value[1] ? "border-yellow-500" : "hover:border-yellow-600"} rounded-lg transition-all`}
+                                                className={`w-full flex items-center border-2 border-outline border-transparent my-4 ${focus.classID == value[1] ? "border-yellow-500" : "hover:border-yellow-600"} rounded-lg transition-all`}
                                                 onClick={() => {
-                                                    if (focus == value[1]) {
-                                                        setFocus(null);
+                                                    if (focus.classID == value[1]) {
+                                                        resetFocus();
                                                     } else {
-                                                        setFocus(value[1]);
+                                                        setFocus({classID: value[1], period: focus.period, semester: focus.classID == null ? null : data[focus.classID as number].term.length == 2 ? "year" : data[focus.classID as number].term.length == 1 && data[focus.classID as number].term[0] == 1 ? "fall" : "spring"});
                                                     }
                                                 }}
                                             >
