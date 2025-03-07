@@ -1,3 +1,7 @@
+// Term: [1] = Fall
+// Term: [2] = Spring
+// Term: [1, 2] = Year
+
 export const data : {[id: number]: {
     name: string,
     department: string,
