@@ -187,11 +187,11 @@ export default function Classes() {
         <div className="w-full h-full flex flex-grow justify-evenly gap-3">
             {/* Left Side */}
             <div className="w-1/3 h-full flex flex-col">
-                <div className="w-full h-[10vh] bg-baseM-200 flex items-center justify-center mb-4 rounded-lg p-4 gap-3">
+                <div className="w-full min-h-[10vh] bg-baseM-200 flex items-center justify-center mb-4 rounded-lg p-4 gap-3">
                     <div className="text-2xl text-center font-semibold tracking-wider">Available Classes</div>
                 </div>
                 {/* Class Selection */}
-                <div className="w-full max-h-[80vh] h-full flex flex-col bg-baseM-200 py-4 px-2 items-center rounded-lg">
+                <div className="w-full max-h-[75vh] h-full flex flex-col bg-baseM-200 py-4 px-2 items-center rounded-lg">
                         <div
                             className="w-full flex flex-col px-2 items-center overflow-y-auto overflow-x-hidden"
                             style={{
@@ -251,7 +251,6 @@ export default function Classes() {
                         <button
                             className={`w-3/4 px-3 py-2 flex items-center justify-center gap-1 rounded-md border-2 ${selected.left == null ? "border-emerald-900 text-emerald-900" : "border-emerald-600 text-emerald-600 hover:border-emerald-700 hover:text-emerald-700"} transition-colors`}
                             onClick={() => {
-                                // if (selected.left != null) setClasses(...classes, selected.left);
                                 if (selected.left != null) setClasses([...classes, selected.left]);
                                 updateSelected("left", null)
                             }}
@@ -290,11 +289,11 @@ export default function Classes() {
             </div>
             {/* Right Side */}
             <div className="w-1/3 h-full flex flex-col">
-                <div className="w-full h-[10vh] bg-baseM-200 flex items-center justify-center mb-4 rounded-lg p-4 gap-3">
+                <div className="w-full min-h-[10vh] bg-baseM-200 flex items-center justify-center mb-4 rounded-lg p-4 gap-3">
                     <div className="text-2xl text-center font-semibold tracking-wider">Your Classes</div>
                 </div>
                 {/* Class Selection */}
-                <div className="w-full max-h-[80vh] h-full flex flex-col bg-baseM-200 py-4 px-2 items-center rounded-lg">
+                <div className="w-full max-h-[75vh] h-full flex flex-col bg-baseM-200 py-4 px-2 items-center rounded-lg">
                         <div
                             className="w-full flex flex-col px-2 items-center overflow-y-auto overflow-x-hidden"
                             style={{

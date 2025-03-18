@@ -1,12 +1,12 @@
 // import { motion } from "motion/react";
-import Logo from "../assets/allenisd_logo-removebg-preview.png";
+// import Logo from "../assets/allenisd_logo-removebg-preview.png";
 
-import RadialGradientAnimation from "../components/RadialGradientAnimation";
+// import RadialGradientAnimation from "../components/RadialGradientAnimation";
 
 export default function Home() {
     return (
         <>
-        <div className="flex flex-grow items-center justify-evenly gap-3 relative">
+        {/* <div className="flex flex-grow items-center justify-evenly gap-3 relative">
             <div className="z-10">
                 <img className="w-[25vw]" src={Logo} />
             </div>
@@ -21,7 +21,7 @@ export default function Home() {
             <div className="absolute bottom-0 left-0 -translate-x-[50vw] translate-y-[50vw]">
                 <RadialGradientAnimation />
             </div>
-        </div>
+        </div> */}
         </>
     )
 }
