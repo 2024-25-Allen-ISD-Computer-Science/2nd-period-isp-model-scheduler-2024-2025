@@ -8,27 +8,28 @@ exampleDict = {
     }
 }
 
-# Example CSV data
 data_dict = {}
 ignore = []
+STEAM = []
 
-with open("test_data.csv") as file:
+with open("STEAM_Classes.txt") as file:
+    STEAM_data = file.readlines()
+
+for line in STEAM_data:
+    STEAM.append(line.replace('\n', ''))
+
+with open("data.csv") as file:
     data = file.readlines()
 
-for i in range(2, len(data)):
-    data[i] = data[i].replace('\n', '')
-    columns = data[i].split(',')
-
-    if "Period" not in columns[1]:
-        if not columns[0] in data_dict:
-            new_dict = {columns[0]: {
-                "department": columns[1],
-                "periods": [],
-                "term": columns[3],
-                "total_enrollment": columns[7],
-                "max_positions": columns[6],
-            }}
-            data_dict.update(new_dict)
-
-for item in data_dict:
-    print(item)
+array1 = data[4].split('S1,S2')
+array2 = []
+for item in array1:
+    array2.extend(item.split('",'))
+for item in range(len(array2) - 1, -1, -1):
+    # print(item, len(array2))
+    if (array2[item] == ''):
+        try:
+            array2.pop(item)
+        except:
+            print("Cleaned for item: #")
+    elif (arary2[item].von):

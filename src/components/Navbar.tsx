@@ -9,7 +9,6 @@ export default function Navbar() {
           <div className="flex gap-10">
             <Link className="text-white hover:text-blue-500 transition-all" to={{pathname: "/"}}>Home</Link>
             <Link className="text-white hover:text-blue-500 transition-all" to={{pathname: "/faq"}}>FAQ</Link>
-            <Link className="text-white hover:text-blue-500 transition-all" to={{pathname: "/tutorial"}}>Tutorial</Link>
             <Link className="text-white hover:text-blue-500 transition-all" to={{pathname: "/classes"}}>Classes</Link>
             <Link className="text-white hover:text-blue-500 transition-all" to={{pathname: "/schedule"}}>Schedule</Link>
           </div>
