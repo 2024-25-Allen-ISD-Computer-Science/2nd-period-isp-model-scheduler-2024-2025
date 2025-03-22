@@ -203,7 +203,7 @@ export default function Classes() {
                                 if ((leftSearch == "" || value.name.toLocaleLowerCase().includes(leftSearch.toLocaleLowerCase())) && filters.campus.includes(value.department) && filterPeriods(filters.periods, value.periods) && filterTerms(filters.term, value.term)) {
                                     return <button
                                         key={i}
-                                        className={`${classes.includes(i) ? "hidden" : ""} w-full h-36 flex items-center my-2 border-2 border-outline border-transparent rounded-lg ${selected.left == i ? "border-yellow-500" : "hover:border-yellow-600"} transition-all`}
+                                        className={`${classes.includes(i) ? "hidden" : ""} w-full h-fit flex items-center my-2 border-2 border-outline border-transparent rounded-lg ${selected.left == i ? "border-yellow-500" : "hover:border-yellow-600"} transition-all`}
                                         onClick={() => {
                                             if (selected.left != i) {
                                                 updateSelected("left", i);
@@ -305,7 +305,7 @@ export default function Classes() {
                                 if ((leftSearch == "" || key.toLocaleLowerCase().includes(leftSearch.toLocaleLowerCase())) && filters.campus.includes(value.department) && filterPeriods(filters.periods, value.periods) && filterTerms(filters.term, value.term)) {
                                     return <button
                                         key={i}
-                                        className={`${classes.includes(i) ? "" : "hidden"} w-full h-36 flex items-center my-2 border-2 border-outline border-transparent rounded-lg ${selected.right == i ? "border-yellow-500" : "hover:border-yellow-600"} transition-all`}
+                                        className={`${classes.includes(i) ? "" : "hidden"} w-full h-fit flex items-center my-2 border-2 border-outline border-transparent rounded-lg ${selected.right == i ? "border-yellow-500" : "hover:border-yellow-600"} transition-all`}
                                         onClick={() => {
                                             if (selected.right != i) {
                                                 updateSelected("right", i);

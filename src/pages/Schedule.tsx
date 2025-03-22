@@ -112,13 +112,13 @@ export default function Schedule() {
             let isAvailable = true;
             for (const num of data[focus.classID as number].term) {
                 const semester = semesters[num as 1 | 2] as "fall" | "spring";
-                if (schedule[semester][2] != null && (data[schedule[semester][2] as number].department == "STEAM" || data[schedule[semester][2] as number].department == "CTE" || data[schedule[semester][2] as number].name.includes('Privilege Period')) && data[focus.classID].department == "AHS") {
+                if (schedule[semester][2] != null && (data[schedule[semester][2] as number].department == "STEAM" || data[schedule[semester][2] as number].department == "CTE" || data[schedule[semester][2] as number].name.includes('Privilege Period')) && data[focus.classID].department == "AHS" && !data[focus.classID].name.includes("Privilege")) {
                     isAvailable = false;
                 }
             }
             for (const num of data[focus.classID as number].term) {
                 const semester = semesters[num as 1 | 2] as "fall" | "spring";
-                if (schedule[semester][5] != null && (data[schedule[semester][5] as number].department == "STEAM" || data[schedule[semester][5] as number].department == "CTE"  || data[schedule[semester][5] as number].name.includes('Privilege Period')) && data[focus.classID].department == "AHS") {
+                if (schedule[semester][5] != null && (data[schedule[semester][5] as number].department == "STEAM" || data[schedule[semester][5] as number].department == "CTE"  || data[schedule[semester][5] as number].name.includes('Privilege Period')) && data[focus.classID].department == "AHS" && !data[focus.classID].name.includes("Privilege")) {
                     isAvailable = false;
                 }
             }
@@ -145,13 +145,13 @@ export default function Schedule() {
             let isAvailable = true;
             for (const num of data[focus.classID as number].term) {
                 const semester = semesters[num as 1 | 2] as "fall" | "spring";
-                if (schedule[semester][4] != null && (data[schedule[semester][4] as number].department == "STEAM" || data[schedule[semester][4] as number].department == "CTE" || data[schedule[semester][4] as number].name.includes('Privilege Period')) && data[focus.classID].department == "AHS") {
+                if (schedule[semester][4] != null && ((data[schedule[semester][4] as number].department == "STEAM" || data[schedule[semester][4] as number].department == "CTE") && !data[schedule[semester][4] as number].name.includes('Privilege Period')) && data[focus.classID].department == "AHS" && !data[focus.classID].name.includes("Privilege")) {
                     isAvailable = false;
                 }
             }
             for (const num of data[focus.classID as number].term) {
                 const semester = semesters[num as 1 | 2] as "fall" | "spring";
-                if (schedule[semester][7] != null && (data[schedule[semester][7] as number].department == "STEAM" || data[schedule[semester][7] as number].department == "CTE" || data[schedule[semester][7] as number].name.includes('Privilege Period')) && data[focus.classID].department == "AHS") {
+                if (schedule[semester][7] != null && ((data[schedule[semester][7] as number].department == "STEAM" || data[schedule[semester][7] as number].department == "CTE") && !data[schedule[semester][7] as number].name.includes('Privilege Period')) && data[focus.classID].department == "AHS" && !data[focus.classID].name.includes("Privilege")) {
                     isAvailable = false;
                 }
             }
@@ -249,15 +249,15 @@ export default function Schedule() {
                 { schedule[semester][period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] == null ? (
                     period == 1 ? <span>1<sup>st</sup> Period</span> : period == 2 ? <span>2<sup>nd</sup> Period</span> : period == 3 ? <span>3<sup>rd</sup> Period</span> : <span>{period}<sup>th</sup> Period</span>
                     ) : (
-                    <div className={`w-full h-full rounded-lg flex flex-col justify-center p-2 text-xs`}>
+                    <div className={`w-full h-full rounded-lg flex flex-col justify-center p-2 text-xs gap-2`}>
                         <div>
                             {period != null && schedule[semester][period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] != null ? data[schedule[semester][period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] as number].name : null}
                         </div>
-                        <div className="w-full flex items-center justify-evenly">
-                            <div className="w-1/3">
+                        <div className="w-full flex items-center justify-center gap-3">
+                            <div className="w-24">
                                 <CampusTag campus={data[schedule[semester][period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] as number].department} />
                             </div>
-                            <div className="w-2/3">
+                            <div className="w-fit">
                                 <span>{data[schedule[semester][period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] as number].department == "AHS" ? time[0] : time[2]}</span><span>-</span><span>{data[schedule[semester][period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] as number].department == "AHS" ? time[1] : time[3]}</span>
                             </div>
                         </div>
@@ -332,10 +332,13 @@ export default function Schedule() {
                                 <button
                                     className="w-full h-full flex flex-col justify-center items-center"
                                     onClick={() => {
-                                        setAvailableClasses([...availableClasses].concat([focus.classID as number]));
-                                        removeFromSchedule(focus.period as number, focus.semester as "fall" | "spring");
-                                        resetFocus();
+                                        if (focus.classID != null) {
+                                            setAvailableClasses([...availableClasses].concat([focus.classID as number]));
+                                            removeFromSchedule(focus.period as number, focus.semester as "fall" | "spring");
+                                            resetFocus();
+                                        }
                                     }}
+                                    disabled={focus.classID == null}
                                     >
                                     <span className="my-1 text-xl font-semibold tracking-wider">No Classes Available</span>
                                     <span className="my-1 text-base">Add classes <Link className="text-blue-500 hover:text-blue-600 transition-all underline" to={{

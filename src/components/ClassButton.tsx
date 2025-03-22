@@ -12,10 +12,10 @@ export default function ClassButton({
         max_positions: number,
     },
 }) {
-    const fraction = parseFloat((5 - (value.total_enrollment / value.max_positions) * 5).toFixed(2));
+    // const fraction = parseFloat((5 - (value.total_enrollment / value.max_positions) * 5).toFixed(2));
     
-    return <div className="w-full h-full flex flex-col gap-1 justify-between items-center bg-baseM-100 rounded-lg p-4">
-        <div className="w-[70%] flex flex-col gap-1 justify-center text-start">
+    return <div className="w-full flex flex-col gap-1 justify-between items-center bg-baseM-100 rounded-lg p-4">
+        <div className="w-[70%] flex flex-col gap-1 justify-center text-start py-8">
             {/* Class Name */}
             <div className="md:text-lg text-xl font-bold tracking-wider text-center">
                 {value.name}
@@ -58,8 +58,8 @@ export default function ClassButton({
                     })
                 }
             </div> */}
-        </div>
         {/* Tags */}
+        </div>
         <div className="w-[80%] min-w-24 h-full flex justify-evenly gap-2">
             <div className="w-full h-10">
                 <CampusTag campus={value.department} />
