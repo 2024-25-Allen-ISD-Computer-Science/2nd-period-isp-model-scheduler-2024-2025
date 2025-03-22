@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import Classes from './pages/Classes';
 import Schedule from './pages/Schedule';
@@ -14,7 +14,6 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route path="classes" element={<Classes />} />
           <Route path="faq" element={<FAQ />} />
-          <Route path="*" element={<Navigate to="/" />} />
         </Route>
       </Routes>
     </BrowserRouter>
