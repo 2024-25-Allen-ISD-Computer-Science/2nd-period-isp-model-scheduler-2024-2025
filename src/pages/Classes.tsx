@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { IoMdCheckmark, IoMdClose } from "react-icons/io";
 
 
-import { data } from "../assets/data";
+import { data } from "../assets/data.tsx";
 import ClassButton from "../components/ClassButton";
 import { CampusTag, TermTag } from "../components/Tags";
 import useLocalStorage from "../util/useLocalStorage";
@@ -115,7 +115,7 @@ export default function Classes() {
                                     {
                                         Object.entries([1, 2, 3]).map((value, i) => {
                                             if (value[1] == 1) {
-                                                return <button key={i} className="w-fit" onClick={() => {
+                                                return <button key={i} className="w-20 h-10 p-2" onClick={() => {
                                                     if (filters.term.includes(value[1])) {
                                                         setFilters((prev) => ({
                                                             ...prev,
@@ -131,7 +131,7 @@ export default function Classes() {
                                                     <TermTag term={[1]} disabled={!filters.term.includes(1)} className="h-[5vh]" />
                                                 </button>
                                             } else if (value[1] == 2) {
-                                                return <button key={i} className="w-fit" onClick={() => {
+                                                return <button key={i} className="w-20 h-10 p-2" onClick={() => {
                                                     if (filters.term.includes(value[1])) {
                                                         setFilters((prev) => ({
                                                             ...prev,
@@ -215,7 +215,7 @@ export default function Classes() {
                                         <ClassButton value={value} />
                                     </button>
                                 } else {
-                                    return <div key={key}>{key}</div>
+                                    return <div key={key}></div>
                                 }
                             })
                         }

@@ -14,10 +14,10 @@ export default function ClassButton({
 }) {
     const fraction = parseFloat((5 - (value.total_enrollment / value.max_positions) * 5).toFixed(2));
     
-    return <div className="w-full h-full flex gap-1 justify-between items-center bg-baseM-100 rounded-lg p-4">
-        <div className="w-[70%] flex flex-col gap-1 justify-between text-start">
+    return <div className="w-full h-full flex flex-col gap-1 justify-between items-center bg-baseM-100 rounded-lg p-4">
+        <div className="w-[70%] flex flex-col gap-1 justify-center text-start">
             {/* Class Name */}
-            <div className="md:text-lg text-xl font-bold tracking-wider">
+            <div className="md:text-lg text-xl font-bold tracking-wider text-center">
                 {value.name}
             </div>
 
@@ -32,7 +32,7 @@ export default function ClassButton({
             </div>
             
             {/* Availability */}
-            <div className="w-full h-8 flex items-center justify-start gap-3">
+            {/* <div className="w-full h-8 flex items-center justify-start gap-3">
                 <div>Availability:</div>
                 {
                     [1, 2, 3, 4, 5].map((value) => {
@@ -57,10 +57,10 @@ export default function ClassButton({
                         }
                     })
                 }
-            </div>
+            </div> */}
         </div>
         {/* Tags */}
-        <div className="w-[20%] min-w-24 h-full flex flex-col justify-evenly gap-2">
+        <div className="w-[80%] min-w-24 h-full flex justify-evenly gap-2">
             <div className="w-full h-10">
                 <CampusTag campus={value.department} />
             </div>

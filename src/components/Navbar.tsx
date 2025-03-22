@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function Navbar() {
     return (
-        <div className="w-full h-[5vh] flex justify-between items-center px-10 font-bold border-b-2 border-zinc-600">
+        <div className="w-full h-[5vh] flex justify-between items-center z-[20] px-10 font-bold border-b-2 border-zinc-600 backdrop-blur-lg">
           <div>
             AHS Model Scheduler
           </div>

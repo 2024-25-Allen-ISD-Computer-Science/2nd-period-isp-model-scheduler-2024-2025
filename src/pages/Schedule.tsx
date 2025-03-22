@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { data } from "../assets/data";
+import { data } from "../assets/data.tsx";
 import useLocalStorage from "../util/useLocalStorage";
 import ClassButton from "../components/ClassButton";
 import { CampusTag } from "../components/Tags";
@@ -249,15 +249,15 @@ export default function Schedule() {
                 { schedule[semester][period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] == null ? (
                     period == 1 ? <span>1<sup>st</sup> Period</span> : period == 2 ? <span>2<sup>nd</sup> Period</span> : period == 3 ? <span>3<sup>rd</sup> Period</span> : <span>{period}<sup>th</sup> Period</span>
                     ) : (
-                    <div className={`w-full h-full rounded-lg flex flex-col justify-center p-2`}>
+                    <div className={`w-full h-full rounded-lg flex flex-col justify-center p-2 text-xs`}>
                         <div>
                             {period != null && schedule[semester][period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] != null ? data[schedule[semester][period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] as number].name : null}
                         </div>
                         <div className="w-full flex items-center justify-evenly">
-                            <div className="w-1/3 text-sm">
+                            <div className="w-1/3">
                                 <CampusTag campus={data[schedule[semester][period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] as number].department} />
                             </div>
-                            <div className="w-2/3 text-sm">
+                            <div className="w-2/3">
                                 <span>{data[schedule[semester][period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] as number].department == "AHS" ? time[0] : time[2]}</span><span>-</span><span>{data[schedule[semester][period as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8] as number].department == "AHS" ? time[1] : time[3]}</span>
                             </div>
                         </div>
@@ -403,7 +403,7 @@ export default function Schedule() {
                         <div className="w-full h-[8%] flex items-center justify-center font-semibold tracking-wider text-lg rounded-lg border border-zinc-700 bg-zinc-900 mb-1">
                             Spring Semester
                         </div>
-                        <div className="w-full flex flex-col flex-grow gap-3">
+                        <div className="w-full max-w-[100%] flex flex-col flex-grow gap-3">
                             <div className="w-full h-[8%] flex items-between gap-3">
                                 <div className={`w-1/2 h-full flex items-center justify-center bg-red-600 py-3 px-4 rounded-lg font-semibold`}>
                                     A-Day
@@ -412,7 +412,7 @@ export default function Schedule() {
                                     B-Day
                                 </div>
                             </div>
-                            <div className="w-full flex flex-grow flex-col gap-3">
+                            <div className="flex flex-grow flex-col gap-3">
                                 {
                                     Object.entries([[1], [2, 5], [3, 6], [4, 7], [8]]).map((value, i) => {
                                         const time = value[0].length == 1 ? returnTime(0, value) : returnTime(0, value).concat(returnTime(1, value));
