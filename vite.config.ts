@@ -6,7 +6,7 @@ import { resolve } from 'path';
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: "/",
+  base: "/2024-25-allen-isd-computer-science.github.io/",
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src/'),
