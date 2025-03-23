@@ -342,7 +342,7 @@ export default function Schedule() {
                                     >
                                     <span className="my-1 text-xl font-semibold tracking-wider">No Classes Available</span>
                                     <span className="my-1 text-base">Add classes <Link className="text-blue-500 hover:text-blue-600 transition-all underline" to={{
-                                        pathname: "/classes"
+                                        pathname: "/2nd-period-isp-model-scheduler-2024-2025/classes"
                                     }}>here</Link></span>
                                 </button>
                             : <>

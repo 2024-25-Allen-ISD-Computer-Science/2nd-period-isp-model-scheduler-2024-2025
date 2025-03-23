@@ -9,11 +9,12 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="schedule" element={<Schedule />} />
+        <Route path="/2nd-period-isp-model-scheduler-2024-2025/schedule" element={<Schedule />} />
         <Route index element={<Home />} />
-        <Route path="/" element={<Layout />}>
-          <Route path="classes" element={<Classes />} />
-          <Route path="faq" element={<FAQ />} />
+        <Route path="/2nd-period-isp-model-scheduler-2024-2025/" element={<Home />} />
+	<Route path="/2nd-period-isp-model-scheduler-2024-2025/" element={<Layout />}>
+          <Route path="/2nd-period-isp-model-scheduler-2024-2025/classes" element={<Classes />} />
+          <Route path="/2nd-period-isp-model-scheduler-2024-2025/faq" element={<FAQ />} />
         </Route>
       </Routes>
     </BrowserRouter>

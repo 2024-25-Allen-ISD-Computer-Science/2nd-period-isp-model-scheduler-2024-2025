@@ -7,10 +7,10 @@ export default function Navbar() {
             AHS Model Scheduler
           </div>
           <div className="flex gap-10">
-            <Link className="text-white hover:text-blue-500 transition-all" to={{pathname: "/"}}>Home</Link>
-            <Link className="text-white hover:text-blue-500 transition-all" to={{pathname: "/faq"}}>FAQ</Link>
-            <Link className="text-white hover:text-blue-500 transition-all" to={{pathname: "/classes"}}>Classes</Link>
-            <Link className="text-white hover:text-blue-500 transition-all" to={{pathname: "/schedule"}}>Schedule</Link>
+            <Link className="text-white hover:text-blue-500 transition-all" to={{pathname: "/2nd-period-isp-model-scheduler-2024-2025/"}}>Home</Link>
+            <Link className="text-white hover:text-blue-500 transition-all" to={{pathname: "/2nd-period-isp-model-scheduler-2024-2025/faq"}}>FAQ</Link>
+            <Link className="text-white hover:text-blue-500 transition-all" to={{pathname: "/2nd-period-isp-model-scheduler-2024-2025/classes"}}>Classes</Link>
+            <Link className="text-white hover:text-blue-500 transition-all" to={{pathname: "/2nd-period-isp-model-scheduler-2024-2025/schedule"}}>Schedule</Link>
           </div>
         </div>
     )

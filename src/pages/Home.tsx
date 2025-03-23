@@ -42,7 +42,7 @@ export default function Home() {
                     <div className="text-2xl">
                         Model Scheduler 2024-2025
                     </div>
-                    <Link to={{pathname: '/classes'}} className="border-2 border-black px-3 py-1 border-white hover:border-blue-500 hover:text-blue-500 transition-all rounded-lg flex items-center text-xl">
+                    <Link to={{pathname: '/2nd-period-isp-model-scheduler-2024-2025/classes'}} className="border-2 border-black px-3 py-1 border-white hover:border-blue-500 hover:text-blue-500 transition-all rounded-lg flex items-center text-xl">
                         <span>Start </span><FiArrowRight />
                     </Link>
                 </div>
