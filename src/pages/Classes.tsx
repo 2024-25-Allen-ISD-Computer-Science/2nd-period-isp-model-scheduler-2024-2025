@@ -279,10 +279,8 @@ export default function Classes() {
                         >
                             <span className="text-lg">Clear</span>
                         </button>
-                        <Link className="w-3/4 px-3 py-2 flex items-center justify-center gap-1 rounded-md border-2 text-zinc-300 border-zinc-300 hover:text-zinc-400 hover:border-zinc-400 transition-colors" to={{
-                            pathname: "/2nd-period-isp-model-scheduler-2024-2025/schedule"
-                        }}>
-                            <span className="text-lg">Schedule</span>
+                        <Link className="w-3/4 px-3 py-2 flex items-center justify-center gap-1 rounded-md border-2 text-zinc-300 border-zinc-300 hover:text-zinc-400 hover:border-zinc-400 transition-colors" to={{pathname: "/2nd-period-isp-model-scheduler-2024-2025/schedule"}}>
+				<span className="text-lg">Schedule</span>
                         </Link>
                     </div>
                 </div>
