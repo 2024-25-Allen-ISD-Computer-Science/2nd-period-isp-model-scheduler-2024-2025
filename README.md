@@ -5,7 +5,7 @@ VERSION:
 
 ## Developers
  - Hannah Seo (hannah-seo)
- - Issac Hooper (Fizzy78)
+ - Isaac Hooper (Fizzy78)
  - Baneen Ahmed
  - Richard Jang (o7)
 
